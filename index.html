@@ -65,7 +65,7 @@
                    var coords = projection(d.geometry.coordinates);
                    return coords ? coords[1] : -1000;
                })
-               .attr("r", 5)
+               .attr("r", 1)
                .style("fill", function(d) {
                    // Apply the color scale to store numbers
                    var colorValue = colorScale(d.properties.storeNumber);
