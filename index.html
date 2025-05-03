@@ -13,8 +13,8 @@
 </head>
 <body>
 	<script>
-       var w = 800;
-       var h = 500;
+       var w = window.innerWidth;
+       var h = window.innerHeight;
 
        var projection = d3.geoAlbersUsa()
            .translate([w / 2, h / 2])
@@ -41,11 +41,6 @@
            var minStoreNumber = d3.min(storeNumbers);
            var maxStoreNumber = d3.max(storeNumbers);
 
-           // Create a color scale based on the storeNumber
-           var colorScale = d3.scaleLinear()
-               .domain([minStoreNumber, maxStoreNumber])
-               .range([0, 255]);  // Mapping the store number to RGB range
-
            svg.selectAll("path")
                .data(usData.features)
                .enter()
@@ -67,9 +62,11 @@
                })
                .attr("r", 1)
                .style("fill", function(d) {
-                   // Apply the color scale to store numbers
-                   var colorValue = colorScale(d.properties.storeNumber);
-                   return "rgb(255," + colorValue + ",0)";
+                    if(d.properties.freeWifi === "Y"){
+                        return "red";
+                    }else{
+                        return "yellow";
+                    }
                })
                .style("stroke", "gray")
                .style("stroke-width", 0.25)
