@@ -32,7 +32,19 @@
            d3.json("https://kitty-koding.github.io/McDo/usStates.json"),  // Corrected link to usStates.json
            d3.json("https://kitty-koding.github.io/McDo/mcdonalds.geojson")  // Assuming this file is correct
        ]).then(function([usData, storeData]) {
-            const scal = d3.scaleLinear([d3.min(d.properties.storeNumber), d3.max(d.properties.storeNumber)], [0, 255]);
+
+           // Get the min and max store numbers
+           var storeNumbers = storeData.features.map(function(d) {
+               return d.properties.storeNumber;
+           });
+
+           var minStoreNumber = d3.min(storeNumbers);
+           var maxStoreNumber = d3.max(storeNumbers);
+
+           // Create a color scale based on the storeNumber
+           var colorScale = d3.scaleLinear()
+               .domain([minStoreNumber, maxStoreNumber])
+               .range([0, 255]);  // Mapping the store number to RGB range
 
            svg.selectAll("path")
                .data(usData.features)
@@ -54,8 +66,10 @@
                    return coords ? coords[1] : -1000;
                })
                .attr("r", 5)
-               .style("fill", function(d){
-                return "rgb(255,"+scal(d.properties.storeNumber)+",0)";
+               .style("fill", function(d) {
+                   // Apply the color scale to store numbers
+                   var colorValue = colorScale(d.properties.storeNumber);
+                   return "rgb(255," + colorValue + ",0)";
                })
                .style("stroke", "gray")
                .style("stroke-width", 0.25)
