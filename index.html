@@ -46,7 +46,7 @@
                .enter()
                .append("path")
                .attr("d", path)
-               .style("fill", "#ddd");
+               .style("fill", "#ddd").style("stroke","#fff").style("stroke-width","5px");
 
            svg.selectAll("circle")
                .data(storeData.features)
@@ -68,8 +68,6 @@
                         return "yellow";
                     }
                })
-               .style("stroke", "gray")
-               .style("stroke-width", 0.25)
                .style("opacity", 0.75)
                .append("title")
                .text(function(d) {
