@@ -29,8 +29,8 @@ var svg = d3.select("body")
 
 // Load both files using Promises
 Promise.all([
-    d3.json("https://kitty-koding.github.io/McDo/us-states.json"),
-    d3.json("https://kitty-koding.github.io/McDo/mcdonalds.geojson")
+    d3.json("https://raw.githubusercontent.com/kitty-koding/McDo/main/us-states.json"),
+    d3.json("https://raw.githubusercontent.com/kitty-koding/McDo/main/mcdonalds.geojson")
 ]).then(function([usData, storeData]) {
     svg.selectAll("path")
         .data(usData.features)
