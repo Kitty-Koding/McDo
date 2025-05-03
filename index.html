@@ -32,6 +32,8 @@
            d3.json("https://kitty-koding.github.io/McDo/usStates.json"),  // Corrected link to usStates.json
            d3.json("https://kitty-koding.github.io/McDo/mcdonalds.geojson")  // Assuming this file is correct
        ]).then(function([usData, storeData]) {
+            const scal = d3.scaleLinear([d3.min(d.properties.storeNumber), d3.max(d.properties.storeNumber)], [0, 255]);
+
            svg.selectAll("path")
                .data(usData.features)
                .enter()
@@ -52,7 +54,9 @@
                    return coords ? coords[1] : -1000;
                })
                .attr("r", 5)
-               .style("fill", "yellow")
+               .style("fill", function(d){
+                return "rgb(255,"+scal(d.properties.storeNumber)+",0)";
+               })
                .style("stroke", "gray")
                .style("stroke-width", 0.25)
                .style("opacity", 0.75)
