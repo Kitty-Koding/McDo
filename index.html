@@ -1,1 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>McDonald's Locations</title>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<style>
+		svg {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<script>
+		var w = 800;
+		var h = 500;
 
+		// Define map projection
+		var projection = d3.geoAlbersUsa()
+			.translate([w / 2, h / 2])
+			.scale([1000]);
+
+		// Define path generator
+		var path = d3.geoPath().projection(projection);
+
+		// Create SVG element
+		var svg = d3.select("body")
+			.append("svg")
+			.attr("width", w)
+			.attr("height", h);
+
+		// Load in US states GeoJSON (make sure this file is in your directory)
+		d3.json("us-states.json", function(usData) {
+			// Draw states
+			svg.selectAll("path")
+				.data(usData.features)
+				.enter()
+				.append("path")
+				.attr("d", path)
+				.style("fill", "#ddd");
+
+			// Load in McDonald's GeoJSON data
+			d3.json("mcdonalds.geojson", function(storeData) {
+				svg.selectAll("circle")
+					.data(storeData.features)
+					.enter()
+					.append("circle")
+					.attr("cx", function(d) {
+						var coords = projection(d.geometry.coordinates);
+						return coords ? coords[0] : -1000; // Hide invalid points
+					})
+					.attr("cy", function(d) {
+						var coords = projection(d.geometry.coordinates);
+						return coords ? coords[1] : -1000;
+					})
+					.attr("r", 5)
+					.style("fill", "yellow")
+					.style("stroke", "gray")
+					.style("stroke-width", 0.25)
+					.style("opacity", 0.75)
+					.append("title") // Tooltip
+					.text(function(d) {
+						return `#${d.properties.storeNumber} - ${d.properties.city}, ${d.properties.state}`;
+					});
+			});
+		});
+	</script>
+</body>
+</html>
