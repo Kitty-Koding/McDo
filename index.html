@@ -13,58 +13,57 @@
 </head>
 <body>
 	<script>
-        var w = 800;
-        var h = 500;
-        
-        var projection = d3.geoAlbersUsa()
-            .translate([w / 2, h / 2])
-            .scale([1000]);
-        
-        var path = d3.geoPath().projection(projection);
-        
-        var svg = d3.select("body")
-            .append("svg")
-            .attr("width", w)
-            .attr("height", h);
-        
-        // Load both files using Promises
-        Promise.all([
-            d3.json("https://kitty-koding.github.io/McDo/us-states.json"),
-            d3.json("https://kitty-koding.github.io/McDo/mcdonalds.geojson")
-        ]).then(function([usData, storeData]) {
-        
-            svg.selectAll("path")
-                .data(usData.features)
-                .enter()
-                .append("path")
-                .attr("d", path)
-                .style("fill", "#ddd");
-        
-            svg.selectAll("circle")
-                .data(storeData.features)
-                .enter()
-                .append("circle")
-                .attr("cx", function(d) {
-                    var coords = projection(d.geometry.coordinates);
-                    return coords ? coords[0] : -1000;
-                })
-                .attr("cy", function(d) {
-                    var coords = projection(d.geometry.coordinates);
-                    return coords ? coords[1] : -1000;
-                })
-                .attr("r", 5)
-                .style("fill", "yellow")
-                .style("stroke", "gray")
-                .style("stroke-width", 0.25)
-                .style("opacity", 0.75)
-                .append("title")
-                .text(function(d) {
-                    return `#${d.properties.storeNumber} - ${d.properties.city}, ${d.properties.state}`;
-                });
-        
-        }).catch(function(error) {
-            console.error("Error loading data: ", error);
+       var w = 800;
+var h = 500;
+
+var projection = d3.geoAlbersUsa()
+    .translate([w / 2, h / 2])
+    .scale([1000]);
+
+var path = d3.geoPath().projection(projection);
+
+var svg = d3.select("body")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
+
+// Load both files using Promises
+Promise.all([
+    d3.json("https://kitty-koding.github.io/McDo/us-states.json"),
+    d3.json("https://kitty-koding.github.io/McDo/mcdonalds.geojson")
+]).then(function([usData, storeData]) {
+    svg.selectAll("path")
+        .data(usData.features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .style("fill", "#ddd");
+
+    svg.selectAll("circle")
+        .data(storeData.features)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) {
+            var coords = projection(d.geometry.coordinates);
+            return coords ? coords[0] : -1000;
+        })
+        .attr("cy", function(d) {
+            var coords = projection(d.geometry.coordinates);
+            return coords ? coords[1] : -1000;
+        })
+        .attr("r", 5)
+        .style("fill", "yellow")
+        .style("stroke", "gray")
+        .style("stroke-width", 0.25)
+        .style("opacity", 0.75)
+        .append("title")
+        .text(function(d) {
+            return `#${d.properties.storeNumber} - ${d.properties.city}, ${d.properties.state}`;
         });
+}).catch(function(error) {
+    console.error("Error loading data: ", error);
+});
+
         </script>
         
 </body>
