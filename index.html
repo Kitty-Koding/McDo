@@ -31,40 +31,39 @@
 			.attr("height", h);
 
 		// Load in US states GeoJSON (make sure this file is in your directory)
-		d3.json("us-states.json", function(usData) {
-			// Draw states
-			svg.selectAll("path")
-				.data(usData.features)
-				.enter()
-				.append("path")
-				.attr("d", path)
-				.style("fill", "#ddd");
+		d3.json("https://kitty-koding.github.io/McDo/us-states.json", function(usData) {
+    svg.selectAll("path")
+        .data(usData.features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .style("fill", "#ddd");
 
-			// Load in McDonald's GeoJSON data
-			d3.json("mcdonalds.geojson", function(storeData) {
-				svg.selectAll("circle")
-					.data(storeData.features)
-					.enter()
-					.append("circle")
-					.attr("cx", function(d) {
-						var coords = projection(d.geometry.coordinates);
-						return coords ? coords[0] : -1000; // Hide invalid points
-					})
-					.attr("cy", function(d) {
-						var coords = projection(d.geometry.coordinates);
-						return coords ? coords[1] : -1000;
-					})
-					.attr("r", 5)
-					.style("fill", "yellow")
-					.style("stroke", "gray")
-					.style("stroke-width", 0.25)
-					.style("opacity", 0.75)
-					.append("title") // Tooltip
-					.text(function(d) {
-						return `#${d.properties.storeNumber} - ${d.properties.city}, ${d.properties.state}`;
-					});
-			});
-		});
+    d3.json("https://kitty-koding.github.io/McDo/mcdonalds.geojson", function(storeData) {
+        svg.selectAll("circle")
+            .data(storeData.features)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) {
+                var coords = projection(d.geometry.coordinates);
+                return coords ? coords[0] : -1000;
+            })
+            .attr("cy", function(d) {
+                var coords = projection(d.geometry.coordinates);
+                return coords ? coords[1] : -1000;
+            })
+            .attr("r", 5)
+            .style("fill", "yellow")
+            .style("stroke", "gray")
+            .style("stroke-width", 0.25)
+            .style("opacity", 0.75)
+            .append("title")
+            .text(function(d) {
+                return `#${d.properties.storeNumber} - ${d.properties.city}, ${d.properties.state}`;
+            });
+    });
+});
+
 	</script>
 </body>
 </html>
